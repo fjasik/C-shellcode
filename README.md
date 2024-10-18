@@ -82,10 +82,10 @@ Run it:
 The attack chain is therefore as follows:
 - The `websocket` shellcode is executed in the `DummyWinsock2App.exe`
 - A socket is immidiately opened connecting to the python server
-- `concat.bin` is downloaded, which is the `DummyDLL.dll` glued with the `reflective_loader` shellcode
+- `concat.bin` is downloaded, which is the `DummyDLL.dll` concatenated with the `reflective_loader` shellcode
 - The `reflective_loader` shellcode is executed, which loads `DummyDLL.dll`
 - `DllMain` is called and the main thread is initialised
-- A message box is spawned, from the DLL
+- A message box is spawned from the DLL
 
 ## Compilaition status
 

@@ -1,0 +1,16 @@
+/.vs
+/.vscode
+/out
+
+websocket/
+reflective_loader/
+spawn/
+
+build/
+
+*.asm
+*.bin
+*.cod
+*.obj
+*.exe
+*.exe[.text]

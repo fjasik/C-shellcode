@@ -98,7 +98,7 @@ The attack chain is therefore as follows:
 | test_string       | ok        | ok          | ok            | ok        | ok          | ok            |
 | test_hash         | ok        | ok          | ok            | ok        | ok          | ok            |
 | websocket         | ok        | ok          | interactv req | ok        | ok          | ok            |
-| reflective_loader | ok        | ok          | ok | compiles but crashes |             |               |
+| reflective_loader | ok        | ok          | ok            | ok        | ok          | ok            |
 | spawn             |           |             |               |           |             |               |
 | inject            |           |             |               |           |             |               |
 
@@ -108,8 +108,7 @@ The attack chain is therefore as follows:
 
 ## To do
 
-- Fix x64 `reflective_loader` shellcode compilation and running
-- Fix `
+- Finish spawn.c and inject.c shellcode files
 
 ## Disclaimer
 

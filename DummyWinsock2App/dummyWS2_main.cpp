@@ -4,6 +4,7 @@
 #include <iostream>
 
 #pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "user32.lib")
 
 SOCKET OpenSocket() {
     WSADATA wsaData = { 0 };
@@ -27,8 +28,10 @@ SOCKET OpenSocket() {
 }
 
 int main() {
-    SOCKET mySocket = OpenSocket();
+    // Force load user32.dll
+    GetSystemMetrics(SM_CXSCREEN);
 
+    SOCKET mySocket = OpenSocket();
     if (mySocket == INVALID_SOCKET) {
         std::cout << "Failed to create socket" << std::endl;
         return 1;

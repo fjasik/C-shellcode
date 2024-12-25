@@ -39,9 +39,6 @@
     <ClCompile Include="test_debug.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="reflective_loader2.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">

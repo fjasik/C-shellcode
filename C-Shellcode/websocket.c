@@ -98,8 +98,6 @@ int main() {
 	// it's a 32 bit unsigned int, so 127.0.0.1 
 	// (0x7F, 0x00, 0x00, 0x01) will become 0x0100007F
 	serverAddr.sin_addr.S_un.S_addr = 0x0100007F;
-	
-	//serverAddr.sin_port = 0x901F;
 
 	DebugWriteChars('c', 'o', 'n', 'n', 'e', 'c', 't', '\n');
 

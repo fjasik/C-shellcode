@@ -24,12 +24,14 @@ int main() {
 	wchar_t user32ModuleName[] = { L'u', L's', L'e', L'r', L'3', L'2', L'.', L'd', L'l', L'l', L'\0'};
 	void* user32Module = GetModuleByName(user32ModuleName);
 	if (!user32Module) {
+		DebugWriteChars('N', 'o', ' ', 'u', 's', 'e', 'r', '3', '2', '\n');
 		return 2;
 	}
 
 	char MessageBoxAName[] = { 'M', 'e', 's', 's', 'a', 'g', 'e', 'B', 'o', 'x', 'A', '\0' };
 	DefineImportedFuncPtrByName(user32Module, MessageBoxA);
 	if (!MessageBoxAFuncPtr) {
+		DebugWriteChars('N', 'o', ' ', 'm', 's', 'g', 'b', 'o', 'x', '\n');
 		return 3;
 	}
 

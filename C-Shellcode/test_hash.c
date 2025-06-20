@@ -23,12 +23,14 @@ int main() {
 	// user32.dll is not loaded into all processes
 	void *user32Module = GetModuleByHash(0x5a6bd3f3);
 	if (!user32Module) {
+		DebugWriteChars('N', 'o', ' ', 'u', 's', 'e', 'r', '3', '2', '\n');
 		return 2;
 	}
 
 	// Case sensitive hash
 	DefineImportedFuncPtrByHash(user32Module, MessageBoxA, 0x384f14b4);
 	if (!MessageBoxAFuncPtr) {
+		DebugWriteChars('N', 'o', ' ', 'm', 's', 'g', 'b', 'o', 'x', '\n');
 		return 3;
 	}
 

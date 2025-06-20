@@ -39,9 +39,6 @@
     <ClCompile Include="test_debug.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="reflective_loader2.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -53,5 +50,10 @@
     <ClInclude Include="test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="align64.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
   </ItemGroup>
 </Project>

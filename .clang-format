@@ -1,0 +1,138 @@
+BasedOnStyle: LLVM
+
+Language: Cpp # Also JavaScript NGL, I"m cooking
+
+# The big boys
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 100
+
+AccessModifierOffset: -4
+AlignEscapedNewlines: LeftWithLastLine
+AlignOperands: AlignAfterOperator
+
+AllowBreakBeforeNoexceptSpecifier: Always
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: Empty
+
+BinPackArguments: false
+BinPackParameters: OnePerLine
+
+BraceWrapping:
+  AfterCaseLabel: false
+  AfterClass: false
+  AfterControlStatement: MultiLine
+  AfterEnum: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterStruct: false
+  AfterUnion: false
+  AfterExternBlock: false
+  BeforeCatch: true
+  BeforeElse: true
+  BeforeLambdaBody: false
+  BeforeWhile: false
+  IndentBraces: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+
+BreakAfterReturnType: Automatic
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeBraces: Custom
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializers: BeforeComma
+BreakInheritanceList: AfterComma
+
+EmptyLineBeforeAccessModifier: Always
+FixNamespaceComments: false
+IncludeBlocks: Regroup
+
+SortIncludes: true
+IncludeCategories:
+  # Winsock2.h must be the top-most include
+  # Because FUCK Winsock2.h
+  - Regex:           '^<winsock2.h>'  
+    Priority:        1
+    SortPriority:    0
+    CaseSensitive:   false
+
+  # Corresponding .h file for .cpp (e.g., for "main.cpp", "main.h")
+  - Regex:           '^[^<][^/]*\.h$'  
+    Priority:        2
+    SortPriority:    0
+    CaseSensitive:   false
+
+  # Local project-specific headers (e.g., "my_header.h")
+  - Regex:           '^\.'  
+    Priority:        3
+    SortPriority:    0
+    CaseSensitive:   false
+
+  # Third-party or external libraries (e.g., gtest, json)
+  - Regex:           '^(<|"(gtest|gmock|isl|json)/)'  
+    Priority:        4
+    SortPriority:    0
+    CaseSensitive:   false
+
+  # External libraries (e.g., LLVM, clang, llvm-c)
+  - Regex:           '^"(llvm|llvm-c|clang|clang-c)/'  
+    Priority:        5
+    SortPriority:    0
+    CaseSensitive:   false
+
+  # Other Windows-specific includes (e.g., windows.h)
+  - Regex:           '^[<]windows'  
+    Priority:        6
+    SortPriority:    0
+    CaseSensitive:   false
+
+  # Standard library includes (e.g., <iostream>, <vector>)
+  - Regex:           '^[<]std'  
+    Priority:        7
+    SortPriority:    0
+    CaseSensitive:   false
+
+  # Catch-all for any other includes (final fallback)
+  - Regex:           '^.*'  
+    Priority:        8
+    SortPriority:    0
+    CaseSensitive:   false
+
+IndentAccessModifiers: false
+IndentCaseBlocks: false
+IndentCaseLabels: false
+IndentExportBlock: true
+IndentGotoLabels: false
+IndentPPDirectives: BeforeHash
+IndentRequiresClause: false
+
+InsertBraces: true
+InsertNewlineAtEOF: true
+
+KeepEmptyLines:
+  AtEndOfFile: true
+  AtStartOfBlock: false
+  AtStartOfFile: false
+
+LineEnding: DeriveCRLF    # Windows for lyfe
+MaxEmptyLinesToKeep: 1    # Try changing this and I will find you
+NamespaceIndentation: All # Yes I know, inefficient
+PackConstructorInitializers: CurrentLine # Let's try
+PointerAlignment: Left    # Non-negotiable
+QualifierAlignment: Left
+ReferenceAlignment: Pointer
+ReflowComments: Always
+RemoveEmptyLinesInUnwrappedLines: true
+RemoveParentheses: MultipleParentheses
+RemoveSemicolon: true
+SeparateDefinitionBlocks: Always
+
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: false
+
+# Here I got bored and will add if I need
